@@ -1,2 +1,3 @@
-# template
-Template for new repo
+# Binary Search Tree
+
+The Odin Project assignment
