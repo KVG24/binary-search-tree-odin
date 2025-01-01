@@ -23,6 +23,23 @@ export class Tree {
 
         return root;
     }
+
+    insert(value, root = this.root) {
+        if (value === root.data) return;
+
+        if (value < root.data && !root.left) {
+            root.left = new Node(value);
+            return;
+        }
+
+        if (value > root.data && !root.right) {
+            root.right = new Node(value);
+            return;
+        }
+
+        if (value < root.data) this.insert(value, root.left);
+        if (value > root.data) this.insert(value, root.right);
+    }
 }
 
 export function printTree(node, prefix = "", isLeft = true) {
