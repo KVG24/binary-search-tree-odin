@@ -88,4 +88,30 @@ export class Tree {
         }
         return root;
     }
+
+    find(value) {
+        let curr = this.root;
+        while (curr !== null) {
+            if (curr.data === value) return curr;
+            if (curr.data < value) curr = curr.right;
+            else curr = curr.left;
+        }
+        return "No such node";
+    }
+
+    levelOrder(callback, queue = [this.root]) {
+        if (!callback) {
+            throw new Error("Provide a callback");
+        }
+        if (queue.length === 0) return;
+
+        const curr = queue.shift();
+
+        callback(curr);
+
+        if (curr.left) queue.push(curr.left);
+        if (curr.right) queue.push(curr.right);
+
+        return this.levelOrder(callback, queue);
+    }
 }
