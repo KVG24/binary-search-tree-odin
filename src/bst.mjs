@@ -24,6 +24,26 @@ export class Tree {
         return root;
     }
 
+    printTree(node = this.root, prefix = "", isLeft = true) {
+        if (node === null) return;
+
+        if (node.right !== null) {
+            this.printTree(
+                node.right,
+                `${prefix}${isLeft ? "│   " : "    "}`,
+                false
+            );
+        }
+        console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+        if (node.left !== null) {
+            this.printTree(
+                node.left,
+                `${prefix}${isLeft ? "    " : "│   "}`,
+                true
+            );
+        }
+    }
+
     insert(value, root = this.root) {
         if (value === root.data) return;
 
@@ -40,16 +60,32 @@ export class Tree {
         if (value < root.data) this.insert(value, root.left);
         if (value > root.data) this.insert(value, root.right);
     }
-}
 
-export function printTree(node, prefix = "", isLeft = true) {
-    if (node === null) return;
-
-    if (node.right !== null) {
-        printTree(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
+    getSuccessor(curr) {
+        curr = curr.right;
+        while (curr !== null && curr.left !== null) {
+            curr = curr.left;
+        }
+        return curr;
     }
-    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
-    if (node.left !== null) {
-        printTree(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
+
+    deleteItem(value, root = this.root) {
+        if (root === null) {
+            return root;
+        }
+
+        if (root.data > value) {
+            root.left = this.deleteItem(value, root.left);
+        } else if (root.data < value) {
+            root.right = this.deleteItem(value, root.right);
+        } else {
+            if (root.left === null) return root.right;
+            if (root.right === null) return root.left;
+
+            let succ = this.getSuccessor(root);
+            root.data = succ.data;
+            root.right = this.deleteItem(succ.data, root.right);
+        }
+        return root;
     }
 }
