@@ -96,13 +96,12 @@ export class Tree {
             if (curr.data < value) curr = curr.right;
             else curr = curr.left;
         }
-        return "No such node";
+        return false;
     }
 
     levelOrder(callback, queue = [this.root]) {
-        if (!callback) {
-            throw new Error("Provide a callback");
-        }
+        if (!callback) throw new Error("Provide a callback");
+
         if (queue.length === 0) return;
 
         const curr = queue.shift();
@@ -113,5 +112,55 @@ export class Tree {
         if (curr.right) queue.push(curr.right);
 
         return this.levelOrder(callback, queue);
+    }
+
+    inOrder(callback, root = this.root) {
+        if (!callback) throw new Error("Provide a callback");
+        if (root.left) this.inOrder(callback, root.left);
+        callback(root);
+        if (root.right) this.inOrder(callback, root.right);
+    }
+
+    preOrder(callback, root = this.root) {
+        if (!callback) throw new Error("Provide a callback");
+        callback(root);
+        if (root.left) this.preOrder(callback, root.left);
+        if (root.right) this.preOrder(callback, root.right);
+    }
+
+    postOrder(callback, root = this.root) {
+        if (!callback) throw new Error("Provide a callback");
+        if (root.left) this.postOrder(callback, root.left);
+        if (root.right) this.postOrder(callback, root.right);
+        callback(root);
+    }
+
+    height(targetNode) {
+        const node = this.find(targetNode);
+        return this.heightCount(node);
+    }
+
+    heightCount(node) {
+        let edges = 0;
+        let leftEdges = 0;
+        let rightEdges = 0;
+
+        if (node.left) leftEdges = 1 + this.heightCount(node.left);
+        if (node.rigt) rightEdges = 1 + this.heightCount(node.right);
+
+        if (leftEdges >= rightEdges) edges += leftEdges;
+        else edges += rightEdges;
+
+        return edges;
+    }
+
+    depth(node, root = this.root, counter = 0) {
+        if (node !== root.data) {
+            if (node < root.data) return this.depth(node, root.left, ++counter);
+            if (node > root.data)
+                return this.depth(node, root.right, ++counter);
+        } else {
+            return counter;
+        }
     }
 }
