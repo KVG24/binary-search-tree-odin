@@ -135,18 +135,22 @@ export class Tree {
         callback(root);
     }
 
-    height(targetNode) {
-        const node = this.find(targetNode);
-        return this.heightCount(node);
+    height(node) {
+        const targetNode = this.find(node);
+        return this.heightCount(targetNode);
     }
 
-    heightCount(node) {
+    heightCount(targetNode) {
         let edges = 0;
         let leftEdges = 0;
         let rightEdges = 0;
 
-        if (node.left) leftEdges = 1 + this.heightCount(node.left);
-        if (node.rigt) rightEdges = 1 + this.heightCount(node.right);
+        if (targetNode.left) {
+            leftEdges = 1 + this.heightCount(targetNode.left);
+        }
+        if (targetNode.right) {
+            rightEdges = 1 + this.heightCount(targetNode.right);
+        }
 
         if (leftEdges >= rightEdges) edges += leftEdges;
         else edges += rightEdges;
@@ -162,5 +166,14 @@ export class Tree {
         } else {
             return counter;
         }
+    }
+
+    isBalanced() {
+        const left = this.height(this.root.left.data);
+        const right = this.height(this.root.right.data);
+        const difference = Math.abs(left - right);
+
+        if (difference <= 1) return true;
+        else return false;
     }
 }
