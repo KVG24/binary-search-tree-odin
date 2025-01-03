@@ -176,4 +176,11 @@ export class Tree {
         if (difference <= 1) return true;
         else return false;
     }
+
+    rebalance() {
+        const oldData = [];
+        this.levelOrder((node) => oldData.push(node.data));
+        let sortedOldData = [...new Set(oldData)].sort((a, b) => a - b);
+        this.root = this.buildTree(sortedOldData);
+    }
 }
